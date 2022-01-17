@@ -1,0 +1,76 @@
+*{
+  color:white;
+}
+
+body{
+background-color: rgb(23, 23, 26);
+background-image: url("/images/bgimg.png");
+margin: 0;
+padding: 0;
+background-position: top;
+font-family: sans-serif;
+animation: animatedBackground 5s ease-in-out infinite ;
+}
+
+@keyframes animatedBackground {
+from {
+  background-position: 83% 0;
+}
+to {
+  background-position: 0 83%;
+}
+}
+
+.login-box{
+margin: 40px auto;
+width: 320px;
+height: 24em;
+color: white;
+background-color: rgb(50, 53, 70);
+border-radius: 15px;
+}
+.login-box h1{
+float: left;
+font-size: 40px;
+border-bottom: 3px solid rgb(251, 251, 255);
+margin-bottom: 50px;
+padding: 13px 16px;
+}
+.textbox{
+width: 100%;
+overflow: hidden;
+font-size: 20px;
+padding: 8px 11px;
+margin: 11px 0;
+
+}
+.textbox i{
+width: 26px;
+float: left;
+text-align: center;
+}
+.textbox input{
+border: none;
+outline: none;
+background: none;
+color: white;
+font-size: 18px;
+width: 80%;
+float: left;
+border-bottom: 1px solid rgb(251, 251, 255);
+}
+
+.lbtn{
+  background-image: -webkit-linear-gradient(top, #f0f0e8, #bab1ba);
+  color: #210a21;
+  display:block;
+  margin:0 auto;
+  border-radius: 28px;
+  font-size: 20px;
+  padding: 7px 20px;
+}
+
+.lbtn:hover{
+  background-image: -webkit-linear-gradient(top, #b8bec2, #959fa6);
+}
+

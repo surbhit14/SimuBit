@@ -1,0 +1,46 @@
+* {
+    color: white;
+    margin:0px;
+    padding:0px;
+}
+
+body {
+    background-color: rgb(23, 23, 26);
+}
+
+.navbar{
+    background-color: rgb(50, 53, 70);
+    font-size: 22px;
+}
+.navbar-brand{
+    color:white!important;
+    font-size: 22px;
+    }
+nav .navbar-nav li a{
+    color: white !important;
+    
+    }
+nav .navbar-nav li a:hover{
+        color:#fccb32!important;
+        }
+        
+#mainname{
+    color:#fccb32!important;
+    margin-left: 10px;
+    font-size: 33px;
+}
+
+@media screen and (min-width: 740px) {
+    #right{
+ position: relative;
+ right: -45;
+}
+}
+
+@media (min-width: 992px){
+.navbar-expand-lg .navbar-collapse {
+    display: flex!important;
+    flex-basis: auto;
+    justify-content: space-between;
+}
+}

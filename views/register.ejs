@@ -1,0 +1,43 @@
+<%- include("header") %>
+    <link rel="stylesheet" href="/css/login.css">
+<div class="login-box" ng-app="myapp" ng-controller="ctrl">
+  <h1>Sign Up</h1>
+
+  <form action="/register" method="POST">
+  <div class="textbox">
+    <h4 style="text-align:center;">Welcome {{name}}</h4>
+    <i class="fas fa-user"></i>
+    <input type="text" placeholder="Name" name="name" ng-model="name">
+  </div>
+
+  <div class="textbox">
+    <i class="fas fa-envelope"></i>
+    <input type="text" placeholder="Email" name="username" ng-model="email">
+  </div>
+
+  <div class="textbox">
+    <i class="fas fa-lock"></i>
+    <input type="password" placeholder="Password" name="password" ng-model="password">
+  </div>
+
+  <button type="submit" class="lbtn" ng-click="checkValidationOnClick()" >SignUp</button>
+</form>
+</div>
+<script>
+  var app = angular.module("myapp", []);
+  app.controller("ctrl", function ($scope) {
+   $scope.name="";
+   $scope.email="";
+   $scope.password="";
+   $scope.checkValidationOnClick = function () {
+
+    if($scope.email==""|| $scope.password=="" || $scope.name=="" )
+   {
+     alert("All fields are mandatory");
+   }
+   }
+
+
+  });
+</script>
+

@@ -1,0 +1,19 @@
+For getting the data of specific crypto 
+https://api.coingecko.com/api/v3/coins/markets?vs_currency=inr&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false
+
+#17171A
+
+Features:
+1.Major Currencies Supported
+2.Charts/Dig available
+3.Achieve/Become an expert
+4.Database
+5.Dashbord
+
+backgroundcolor:rgb(23,23,26)
+
+{boxcolor:background-color: rgb(50, 53, 70);
+    box-shadow: rgb(0 0 0 / 15%) 0px 8px 32px, rgb(0 0 0 / 15%) 0px 4px 4px;}
+
+Be on tartget and become an expert
+User

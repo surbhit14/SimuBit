@@ -1,0 +1,44 @@
+*{
+    color:white;
+}
+
+body{
+    background-color:rgb(23,23,26);
+}
+
+th{
+    font-size: 20px;
+    border-bottom: 2px solid rgb(34,37,49);
+    text-align: center;
+}
+
+td{
+    text-align:center;
+    font-size: 20px;
+    height: 80px;
+    border-bottom: 2px solid rgb(34,37,49);
+}
+
+tr:hover{
+    background-color: rgb(50, 53, 70);;
+}
+
+#heading{
+    font-size:40px;
+    text-align: center;
+    margin:30px;
+    color:#fccb32;
+}
+
+#xyz{
+    text-decoration: none;
+}
+
+.sno{
+    width: 1px;
+}
+
+img{
+    border-radius: 50%;
+}
+

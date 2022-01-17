@@ -1,0 +1,65 @@
+<%- include("header") %>
+<link rel="stylesheet" href="/css/dashboard.css">
+    <h3 id="dash">Dashboard</h3>
+    <table id="dashlist" style="width:100%">
+        <tr>
+            <th>Logo</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Value(USD)</th>
+        </tr>
+        <tr>
+            <td> <img src="/images/USD_Coin_perspective_matte.png" alt="" width="50px" height="50px"> </td>
+            <td>USD(Cash)</td>
+            <td><%=balance%></td>
+            <td>-</td>
+        </tr>
+        <% for (var i=0;i<arr.length;i++){ %>
+            <tr>
+                <td><img src="<%=list[i]%>" alt="logo" width="50px" height="50px"></td>
+                <td><%=arr[i]%></td>
+                <td> <%=dash[arr[i]]%></td>
+                <td>$<%=value[i]%></td>
+            </tr>
+            <% } %>
+
+          
+
+    </table>
+    <div id="piecontainer" style="width: 500px; height: 400px;"></div>
+</body>
+<script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-base.min.js"></script>
+<script>
+    // create data
+    var ar='<%-arr%>';
+    var arr = ar.split(",");
+    var qlist='<%-qlist%>';
+    var qlist=qlist.split(",");
+    var lvalue='<%-value%>';
+    var lvalue=lvalue.split(",");
+    var balance='<%-balance%>';
+    var data=[
+        {x:"USD Cash",
+        value:balance}
+
+    ];
+
+    for(var i=0;i<qlist.length;i++)
+    {
+        console.log(qlist[i])
+    }
+
+
+    for(var i=0;i<arr.length;i++){
+        var obj={};
+        obj.x=arr[i];
+        //obj.value=500;
+       obj.value=parseInt(lvalue[i]);
+        data[i+1]=obj;
+    }
+chart = anychart.pie(data);
+chart.container("piecontainer");
+chart.background().fill("#17171A");
+chart.draw();
+</script>
+</html>
