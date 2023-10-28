@@ -134,76 +134,171 @@ app.post("/login", function(req, res){
 });
 
 app.get('/list', (req, res) => {
-  var url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
-    https.get(url, (resp) => {
-      let data = '';
-      resp.on('data', (chunk) => {
-        data += chunk;
-      });
-      resp.on('end', () => {
-          var c=JSON.parse(data)
-          res.render("list",{list:c})
-      });
-    }).on("error", (err) => {
-      console.log("Error: " + err.message);
+  console.log("Hit");
+  var options = {
+    hostname: 'api.coingecko.com',
+    path: '/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false',
+    method: 'GET',
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; YourBot/1.0; +http://yourwebsite.com/bot.html)' // Replace with your user-agent
+    }
+  };
+
+  https.get(options, (resp) => {
+    let data = '';
+    resp.on('data', (chunk) => {
+      data += chunk;
     });
-  })
+    resp.on('end', () => {
+      try {
+        var c = JSON.parse(data);
+        res.render("list", { list: c });
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        res.status(500).send("Server Error");
+      }
+    });
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+    res.status(500).send("Error making the request");
+  });
+});
   
-  app.get('/list/:cname',function(req, res) {
-    var bq=0;
-    var x=req.params.cname;
-    if(req.isAuthenticated()){
-      var balance=req.user.Cash;
+app.get('/list/:cname', function(req, res) {
+  var bq = 0;
+  var x = req.params.cname;
 
-      var buy=req.user.Brought;
-      for(var i=0;i<buy.length;i++)
-      {
-        if(buy[i].Crypto==x)
-        bq+=buy[i].Quantity;
-      }
+  if (req.isAuthenticated()) {
+    var balance = req.user.Cash;
+    var buy = req.user.Brought;
+    for (var i = 0; i < buy.length; i++) {
+      if (buy[i].Crypto == x)
+        bq += buy[i].Quantity;
+    }
 
-      var sell=req.user.Sold;
-      for(var i=0;i<sell.length;i++)
-      {
-        if(sell[i].Crypto==x)
-        bq-=sell[i].Quantity;
+    var sell = req.user.Sold;
+    for (var i = 0; i < sell.length; i++) {
+      if (sell[i].Crypto == x)
+        bq -= sell[i].Quantity;
+    }
+
+    var options = {
+      hostname: 'api.coingecko.com',
+      path: '/api/v3/coins/markets?vs_currency=usd&ids=' + encodeURIComponent(x) + '&order=market_cap_desc&per_page=100&page=1&sparkline=false',
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; YourBot/1.0; +http://yourwebsite.com/bot.html)' // Replace with your user-agent
       }
-    var url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids='+x+'&order=market_cap_desc&per_page=100&page=1&sparkline=false'
-    https.get(url, (resp) => {
+    };
+
+    https.get(options, (resp) => {
       let data = '';
       resp.on('data', (chunk) => {
         data += chunk;
       });
       resp.on('end', () => {
-        var c=JSON.parse(data);
-        url2='https://dev-api.shrimpy.io/v1/exchanges/coinbasepro/candles?quoteTradingSymbol=USD&baseTradingSymbol=BTC&interval=1h'
-        https.get(url2, (resp) => {
-          let data2='';
-          resp.on('data', (chunk) => {
-            data2+= chunk;
-          });
-        
-          resp.on('end', () => {
-          console.log('Balance inside name is'+(balance));
-          res.render('sepcur',{name:x,balance:balance,list:c,bq:bq,candle:data2});
-          });
-        
-        }).on("error", (err) => {
-          console.log("Error: " + err.message);
-        });
+        var c = JSON.parse(data);
+
+        // Next API call to Shrimpy with options
+        // var options2 = {
+        //   hostname: 'dev-api.shrimpy.io',
+        //   path: '/v1/exchanges/coinbasepro/candles?quoteTradingSymbol=USD&baseTradingSymbol=BTC&interval=1h',
+        //   method: 'GET',
+        //   headers: {
+        //     'User-Agent': 'Mozilla/5.0 (compatible; YourBot/1.0; +http://yourwebsite.com/bot.html)' // Replace with your user-agent
+        //   }
+        // };
+
+        // https.get(options2, (resp) => {
+          let data2 = '';
+        //   resp.on('data', (chunk) => {
+        //     data2 += chunk;
+        //   });
+
+        //   resp.on('end', () => {
+            console.log('Balance inside name is ' + balance);
+            res.render('sepcur', { name: x, balance: balance, list: c, bq: bq, candle: data2 });
+        //   });
+
+        // }).on("error", (err) => {
+        //   console.log("Error: " + err.message);
+        // });
 
       });
     }).on("error", (err) => {
       console.log("Error: " + err.message);
     });
-  }
-
-  else {
+  } else {
     res.redirect("/login");
   }
-    });
+});
 
-  app.post('/list/:cname/buy', 
+app.get("/dashboard", function(req, res){
+  if (req.isAuthenticated()) {
+    var dsh = {};
+    var cryplist = req.user.Clist;
+    var qty = [];
+    var value = [];
+    var bal = req.user.Cash;
+    console.log(bal);
+    for (var i = 0; i < cryplist.length; i++) { 
+      dsh[cryplist[i]] = 0;
+    }
+
+    var buy = req.user.Brought;
+    for (var i = 0; i < buy.length; i++) {
+      dsh[buy[i].Crypto] += buy[i].Quantity;
+    }
+
+    var sell = req.user.Sold;
+    for (var i = 0; i < sell.length; i++) {  
+      dsh[sell[i].Crypto] -= sell[i].Quantity;
+    }
+
+    for (var i = 0; i < cryplist.length; i++) {
+      qty[i] = dsh[cryplist[i]];
+    }
+
+    console.log(dsh);
+
+    var options = {
+      hostname: 'api.coingecko.com',
+      path: '/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false',
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; YourBot/1.0; +http://yourwebsite.com/bot.html)' // Replace with your user-agent
+      }
+    };
+
+    https.get(options, (resp) => {
+      let data = '';
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+      resp.on('end', () => {
+        var list = [];
+        var c = JSON.parse(data);
+        for (var i = 0; i < cryplist.length; i++) {
+          for (var j = 0; j < c.length; j++) {
+            if (cryplist[i] == (c[j].id)) {
+              list[i] = c[j].image;
+              value[i] = (c[j].current_price) * qty[i];
+            }
+          }
+        }
+        res.render("dashboard", { dash: dsh, arr: cryplist, list: list, balance: bal, qlist: qty, value: value });
+      });
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+
+
+app.post('/list/:cname/buy', 
   function(req,res){
       if(req.isAuthenticated()){
       var name=req.params.cname;
